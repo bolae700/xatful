@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>Bola Emad | Final Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* تأثير النجوم الثابت */
+        .star {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: twinkle 2s infinite ease-in-out;
+            z-index: 1; /* تم تعديل الطبقة */
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* تقسيم الخلفية */
+        .split-bg {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(
+                45deg,
+                #0D47A1 0%,
+                #0D47A1 50%,
+                #E65100 50%,
+                #E65100 100%
+            );
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2; /* طبقة أعلى من النجوم */
+        }
+
+        /* الخط الفاصل */
+        .divider {
+            position: fixed;
+            width: 150%;
+            height: 15px;
+            background: #FFF;
+            top: 50%;
+            left: -25%;
+            transform: rotate(45deg) translateY(-50%);
+            z-index: 3;
+        }
+
+        /* الدائرة */
+        .profile-circle {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 15px solid #FFF;
+            overflow: hidden;
+            cursor: pointer;
+            z-index: 4;
+            transition: 0.6s all cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 40px rgba(0,0,0,0.3);
+        }
+
+        .profile-circle:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .profile-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* اسم في الأسفل */
+        .footer-name {
+            position: fixed;
+            bottom: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4em;
+            color: #FFF;
+            z-index: 5;
+            text-shadow: 
+                0 0 25px rgba(0,0,0,0.5),
+                4px 4px 0 #0D47A1,
+                -4px -4px 0 #E65100;
+        }
+
+        /* تصميم الفيديو */
+        .video-portal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 6;
+            transition: 0.6s all ease;
+            opacity: 0;
+            visibility: hidden;
+            border: 15px solid #FFF;
+        }
+
+        .video-active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="split-bg"></div>
+    <div class="divider"></div>
+    
+    <div class="profile-circle">
+        <img src="https://i.ibb.co/S68LdjM/Default-Cute-Boy-Pray-under-Cross-anime-3d-art-0.png" alt="Profile Photo">
+    </div>
+
+    <div class="video-portal"></div>
+
+    <h1 class="footer-name">Bola Emad</h1>
+
+    <script>
+        // إنشاء النجوم - الإصدار المعدل
+        function createStars() {
+            const container = document.body;
+            for (let i = 0; i < 250; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // إعداد المواقع العشوائية
+                const xPos = Math.random() * 100;
+                const yPos = Math.random() * 100;
+                
+                star.style.left = xPos + '%';
+                star.style.top = yPos + '%';
+                
+                // أحجام عشوائية بين 1px و4px
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                // تأخيرات مختلفة للوميض
+                star.style.animationDelay = Math.random() * 2 + 's';
+                
+                // شفافية عشوائية
+                star.style.opacity = Math.random() * 0.5 + 0.3;
+                
+                container.appendChild(star);
+            }
+        }
+        window.addEventListener('DOMContentLoaded', createStars);
+
+        // التحكم في الفيديو
+        const circle = document.querySelector('.profile-circle');
+        const videoPortal = document.querySelector('.video-portal');
+
+        circle.addEventListener('click', () => {
+            videoPortal.classList.add('video-active');
+            videoPortal.innerHTML = `
+                <iframe 
+                    src="https://www.youtube.com/embed/WdsOYUygoss?controls=0" 
+                    allowfullscreen>
+                </iframe>
+            `;
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!circle.contains(e.target) && !videoPortal.contains(e.target)) {
+                videoPortal.classList.remove('video-active');
+                videoPortal.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
